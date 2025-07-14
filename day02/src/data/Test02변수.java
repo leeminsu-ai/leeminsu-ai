@@ -14,7 +14,7 @@ public class Test02변수 {
 		num=9999;
 		System.out.println(num);
 		
-		long over=2200000000L; // long은 꼭표시를해야함
+		long over=2200000000L; //은 꼭표시를해야함
 		System.out.println(over);
 		
 		long oVer=300000000L; //자바는 대소문자를 구분함.
