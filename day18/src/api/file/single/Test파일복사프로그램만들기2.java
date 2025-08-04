@@ -20,19 +20,23 @@ public class Test파일복사프로그램만들기2 {
 		
 		FileInputStream stream=new FileInputStream(in);
 		FileOutputStream stream1=new FileOutputStream(copy);
+		byte[]buffer=new byte[8192];
 		
-		long total=in.length();
-		long count=0L;
+		long begin=System.currentTimeMillis();
+		
+	
 		System.out.println("파일의 크기는 총"+in.length()+"bytes 입니다");
 		while(true) {
-			int a;
-			a=stream.read();
-			if(a==-1)break;
-			stream1.write(a);
+			int size=stream.read(buffer);
+			if(size==-1)break;
 			
-			System.out.println("총"+total+"개 중"+count+"개 이동완료");
+			stream1.write(buffer,0,size);
+			
+			
 		}
+		long end =System.currentTimeMillis();
 		System.out.println("저장이 완료되었습니다");
+		System.out.println("걸린 시간:"+(end-begin)+"입니다");
 		
 	}
 
