@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
 
+<link rel="icon" href="/favicon.ico">
 
 <div>
 	<h1>KH정보교육원 스프링개발자 수업자료</h1>
@@ -11,7 +12,8 @@
 <hr>
 
 <div>
-	세션ID : ${pageContext.session.id} - loginId : ${sessionScope.loginId} , loginLevel : ${sessionScope.loginLevel}
+	세션ID : ${pageContext.session.id} - loginId : ${sessionScope.loginId}
+	 , loginLevel : ${sessionScope.loginLevel}
 </div>
 <div>
 	
@@ -20,6 +22,7 @@
 			<a href="/">홈</a>
 			<a href="/pokemon/list">포켓몬정보</a>
 			<a href="/student/list">학생정보</a>
+			<a href="/board/list">게시판</a>
 			<a href="/member/mypage">내정보</a>
 			<a href="/member/logout">로그아웃</a>
 		</c:when>
@@ -27,6 +30,7 @@
 			<a href="/">홈</a>
 			<a href="/pokemon/list">포켓몬정보</a>
 			<a href="/student/list">학생정보</a>
+			<a href="/board/list">게시판</a>
 			<a href="/book/list">도서정보</a>
 			<a href="/member/mypage">내정보</a>
 			<a href="/member/logout">로그아웃</a>
@@ -35,6 +39,7 @@
 			<a href="/">홈</a>
 			<a href="/pokemon/list">포켓몬정보</a>
 			<a href="/student/list">학생정보</a>
+			<a href="/board/list">게시판</a>
 			<a href="/book/list">도서정보</a>
 			<a href="/member/list">회원검색</a>
 			<a href="/member/logout">로그아웃</a>

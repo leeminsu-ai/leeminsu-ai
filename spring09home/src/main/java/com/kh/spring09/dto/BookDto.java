@@ -1,5 +1,6 @@
 package com.kh.spring09.dto;
 
+import java.sql.Timestamp;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
