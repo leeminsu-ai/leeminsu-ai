@@ -81,11 +81,12 @@ public class BoardDao {
 	}
 	public boolean update(BoardDto boardDto) {
 		String sql = "update board "
-						+ "set board_title=?, board_content=?, board_etime=systimestamp "
+						+ "set board_title=?, board_content=?, "
+						+ "board_notice=?, board_etime=systimestamp "
 						+ "where board_no=?";
 		Object[] params = {
 			boardDto.getBoardTitle(), boardDto.getBoardContent(),
-			boardDto.getBoardNo()
+			boardDto.getBoardNotice(), boardDto.getBoardNo()
 		};
 		return jdbcTemplate.update(sql, params) > 0;
 	}
