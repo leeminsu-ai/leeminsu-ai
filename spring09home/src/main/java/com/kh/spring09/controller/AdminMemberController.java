@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.kh.spring09.dao.MemberDao;
 import com.kh.spring09.dto.MemberDto;
 import com.kh.spring09.error.TargetNotfoundException;
+import com.kh.spring09.vo.PageVO;
 
 @Controller
 @RequestMapping("/admin/member")
@@ -20,17 +21,10 @@ public class AdminMemberController {
 	private MemberDao memberDao;
 	
 	@RequestMapping("/list")
-	public String list(Model model, 
-			@RequestParam(required = false) String column,
-			@RequestParam(required = false) String keyword) {
-		boolean isSearch = column != null && keyword != null;
-		//column, keyword는 넘기지 않고 JSP가 자체적으로 해결
-		if(isSearch) {
-			model.addAttribute("memberList", memberDao.selectList(column, keyword));
-		}
-		else {
-			//model.addAttribute("memberList", memberDao.selectList());
-		}
+	public String list(Model model, @ModelAttribute(value = "pageVO") PageVO pageVO) {
+		model.addAttribute("memberList", memberDao.selectListWithPaging(pageVO));
+		pageVO.setDataCount(memberDao.count(pageVO));
+		//model.addAttribute("pageVO", pageVO);//@ModelAttribute에 value 설정 시 생략 가능
 		return "/WEB-INF/views/admin/member/list.jsp";
 	}
 	

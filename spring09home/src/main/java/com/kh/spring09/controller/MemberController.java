@@ -20,13 +20,6 @@ import jakarta.servlet.http.HttpSession;
 public class MemberController {
 	@Autowired
 	private MemberDao memberDao;
-	
-	@GetMapping("")   // http://localhost:8080/member
-	public String root() {
-	    // /member/login 으로 리다이렉트
-	    return "redirect:/member/login";
-	}
-
 
 	@GetMapping("/join")
 	public String join() {
@@ -41,8 +34,6 @@ public class MemberController {
 	public String joinFinish() {
 		return "/WEB-INF/views/member/joinFinish.jsp";
 	}
-	
-
 	
 //	로그인 매핑
 	@GetMapping("/login")
@@ -70,6 +61,20 @@ public class MemberController {
 			//로그인 성공 시 HttpSession에 이 사용자가 로그인을 성공했음을 데이터로 저장
 			session.setAttribute("loginId", findDto.getMemberId());//아이디
 			session.setAttribute("loginLevel", findDto.getMemberLevel());//등급
+			
+			//로그인 시간 갱신
+			memberDao.updateMemberLogin(findDto.getMemberId());
+			
+//			비밀번호 변경한지 얼마나 됐는지 검사
+//			= findDto.getMemberChange()와 현재시간의 차이를 계산
+//			= 주의사항은 findDto.getMemberChange()가 null이 아니어야 함(가입 시 현재시각으로 설정)
+//			LocalDateTime last = findDto.getMemberChange().toLocalDateTime();
+//			LocalDateTime now = LocalDateTime.now();
+//			Duration d = Duration.between(last, now);
+//			if(d.toDays() >= 30) {
+//				System.out.println("비밀번호를 변경한지 30일이 지났습니다~");
+//				//return "비밀번호변경페이지";
+//			}
 			
 			return "redirect:/";//메인페이지
 		}
@@ -107,34 +112,37 @@ public class MemberController {
 		return "/WEB-INF/views/member/mypage.jsp";
 	}
 	
+//	회원 탈퇴 매핑
 	@GetMapping("/drop")
-		public String drop() {
+	public String drop() {
 		return "/WEB-INF/views/member/drop.jsp";
 	}
-	
 	@PostMapping("/drop")
-	public String drop(HttpSession session,@RequestParam String memberPw) {
-			String loginId=(String)session.getAttribute("loginId"); //세션의 아이디정보를 추출
-			MemberDto memberDto=memberDao.selectOne(loginId);
-			boolean isValid=memberDto.getMemberPw().equals(memberPw); //비밀번호 비교
-			if(isValid) {
-				memberDao.delete(loginId);
-				
-				session.removeAttribute("loginId");
-				session.removeAttribute("loginLevel");
-				return "redirect:goodbye";
-				
-			}
-			else {
-				//redirect는 Get으로밖에 보낼수없다
-				return "redirect:drop?error";
-				
-			}
+	public String drop(HttpSession session, @RequestParam String memberPw) {
+		String loginId = (String) session.getAttribute("loginId");//세션의 아이디 정보를 추출
+		MemberDto memberDto = memberDao.selectOne(loginId);//아이디에 해당하는 DB정보 조회
+		boolean isValid = memberDto.getMemberPw().equals(memberPw);//비밀번호 비교
+		if(isValid) {//비밀번호 일치
+			//회원정보 삭제 (실패할리가 없음)
+			memberDao.delete(loginId);
+			//로그아웃 처리
+			session.removeAttribute("loginId");
+			session.removeAttribute("loginLevel");
+			return "redirect:goodbye";
+		}
+		else {//비밀번호 불일치
+			//redirect는 GET으로밖에 보낼 수 없다
+			return "redirect:drop?error";
+		}
 	}
+	
 	@RequestMapping("/goodbye")
 	public String goodbye() {
 		return "/WEB-INF/views/member/goodbye.jsp";
-	}@GetMapping("/edit")
+	}
+	
+//	내 정보 수정
+	@GetMapping("/edit")
 	public String edit(Model model, HttpSession session) {
 		String loginId = (String) session.getAttribute("loginId");//다운캐스팅
 		MemberDto memberDto = memberDao.selectOne(loginId);//정보조회
@@ -165,27 +173,29 @@ public class MemberController {
 		//memberDao.updateMemberByAdmin(findDto);
 		return "redirect:mypage";
 	}
-		
-//		비밀번호 변경 매핑
-		@GetMapping("/password")
-		public String password() {
-			return "/WEB-INF/views/member/password.jsp";
-		}
-		@PostMapping("/password")
-		public String password(HttpSession session, 
-				@RequestParam String currentPw, @RequestParam String changePw) {
-			String loginId = (String) session.getAttribute("loginId");//로그인 아이디 확인
-			MemberDto memberDto = memberDao.selectOne(loginId);//DB 테이블정보 조회
-			boolean isValid = memberDto.getMemberPw().equals(currentPw);//현재 비밀번호 검사
-			if(isValid == false) return "redirect:password?error";
-			
-			memberDao.updateMemberPw(loginId, changePw);
-//			or
-//			memberDto.setMemberPw(changePw);
-//			memberDao.updateMemberPw(memberDto);
-			
-			return "redirect:mypage";
+	
+	
+//	비밀번호 변경 매핑
+	@GetMapping("/password")
+	public String password() {
+		return "/WEB-INF/views/member/password.jsp";
 	}
+	@PostMapping("/password")
+	public String password(HttpSession session, 
+			@RequestParam String currentPw, @RequestParam String changePw) {
+		String loginId = (String) session.getAttribute("loginId");//로그인 아이디 확인
+		MemberDto memberDto = memberDao.selectOne(loginId);//DB 테이블정보 조회
+		boolean isValid = memberDto.getMemberPw().equals(currentPw);//현재 비밀번호 검사
+		if(isValid == false) return "redirect:password?error";
+		
+		memberDao.updateMemberPw(loginId, changePw);
+//		or
+//		memberDto.setMemberPw(changePw);
+//		memberDao.updateMemberPw(memberDto);
+		
+		return "redirect:mypage";
+	}
+	
 }
 
 

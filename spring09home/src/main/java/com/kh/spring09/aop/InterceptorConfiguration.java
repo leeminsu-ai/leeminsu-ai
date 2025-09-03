@@ -18,6 +18,10 @@ public class InterceptorConfiguration implements WebMvcConfigurer {//웹 기본 
 	private AdminInterceptor adminInterceptor;
 	@Autowired
 	private PreventAdminInterceptor preventAdminInterceptor;
+	@Autowired
+	private BoardOwnerInterceptor boardOwnerInterceptor;
+	@Autowired
+	private BoardReadInterceptor boardReadInterceptor;
 	
 	//설정하고 싶은 메소드를 재정의
 	@Override
@@ -31,12 +35,18 @@ public class InterceptorConfiguration implements WebMvcConfigurer {//웹 기본 
 		// * 를 이용해서 지정한 대상과 동일한 엔드포인트 내의 모든 항목을 지정
 		// ** 를 이용해서 지정한 대상과 하위 모든 항목을 지정
 		registry.addInterceptor(memberLoginInterceptor)
-					.addPathPatterns("/student/**", "/book/**", "/member/**", "/admin/**")
+					.addPathPatterns(
+							"/student/**", "/book/**", 
+							"/member/**", "/admin/**",
+							"/board/**"
+					)
 					.excludePathPatterns(
 						//"/member/join", "/member/joinFinish",
 						"/member/join*",
 						"/member/login",
-						"/member/goodbye"
+						"/member/goodbye",
+						"/board/list",
+						"/board/detail"
 					).order(1);
 		
 //		우수회원용 인터셉터 등록
@@ -51,11 +61,19 @@ public class InterceptorConfiguration implements WebMvcConfigurer {//웹 기본 
 					.addPathPatterns(
 							"/admin/member/detail", "/admin/member/edit", "/admin/member/drop"
 					).order(4);
+		
+//		자기자신(수정/삭제) , 관리자(삭제) 허용 인터셉터 등록
+		registry.addInterceptor(boardOwnerInterceptor)
+					.addPathPatterns("/board/edit", "/board/delete")
+					.order(5);
+		
+//		조회수 중복방지 처리용 인터셉터 등록
+		registry.addInterceptor(boardReadInterceptor)
+					.addPathPatterns("/board/detail")
+					.order(6);
+		
 	}
 }
-
-
-
 
 
 

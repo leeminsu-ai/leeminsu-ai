@@ -41,8 +41,8 @@
 				</tr>
 			</thead>
 			<tbody align="center">
-				<c:forEach var="memberDto" items="${memberList}">
-				<tr>
+				<c:forEach var="memberDto" items="${memberList}" varStatus="status">
+				<tr bgcolor="${status.count % 5 == 0 ? '#ffeaa7' : ''}">
 					<td>
 						<a href="detail?memberId=${memberDto.memberId}">
 							${memberDto.memberId}
@@ -61,13 +61,27 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="7">검색결과 : ${memberList.size()}개</td>
+					<td colspan="7">
+						검색결과 : 
+						${pageVO.begin} - ${pageVO.end}
+						/
+						${pageVO.dataCount}개
+					</td>
+				</tr>
+				<tr>
+					<td colspan="7">
+						검색결과 : 
+						${pageVO.page} / ${pageVO.totalPage} 페이지
+					</td>
 				</tr>
 			</tfoot>	
 		</table>
+		
+		<%-- 페이지 네비게이터 출력 --%>
+		<jsp:include page="/WEB-INF/views/template/pagination.jsp"></jsp:include>
+		
 	</c:otherwise>
 </c:choose>
 
 <jsp:include page="/WEB-INF/views/template/footer.jsp"></jsp:include>
-
 

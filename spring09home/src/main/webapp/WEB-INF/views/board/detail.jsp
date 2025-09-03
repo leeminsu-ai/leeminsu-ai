@@ -1,22 +1,44 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="/WEB-INF/views/template/header.jsp"/>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<h1>게시글 상세보기</h1>
+<jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
-<table border="1" width="100%">
-    <tr><th>번호</th><td>${boardDto.board_no}</td></tr>
-    <tr><th>제목</th><td>${boardDto.board_title}</td></tr>
-    <tr><th>작성자</th><td>${boardDto.board_writer}</td></tr>
-    <tr><th>조회수</th><td>${boardDto.board_read}</td></tr>
-    <tr><th>내용</th><td><pre>${boardDto.board_content}</pre></td></tr>
-</table>
+<h1>${boardDto.boardTitle}</h1>
+<div>
+	${boardDto.boardWriter == null ? '탈퇴한사용자' : boardDto.boardWriter}
+	(등급)
+</div>
+<div>
+	<fmt:formatDate value="${boardDto.boardWtime}" pattern="yyyy-MM-dd HH:mm"/> 
+	조회수 ${boardDto.boardRead}
+</div>
+<hr>
+<div style="min-height: 200px">
+	<pre>${boardDto.boardContent}</pre>
+</div>
+<hr>
+<div>
+	좋아요 ${boardDto.boardLike}  
+	댓글 ${boardDto.boardReply}
+</div>
+<hr>
+<div>
+	<a href="write">글쓰기</a> 
+	<%-- 내 글일 경우 수정 삭제를 모두 표시 --%>
+	<c:if test="${sessionScope.loginId != null}">
+	<c:choose>
+		<c:when test="${sessionScope.loginId == boardDto.boardWriter}">
+			<a href="edit?boardNo=${boardDto.boardNo}">수정</a> 
+			<a href="delete?boardNo=${boardDto.boardNo}">삭제</a>
+		</c:when>
+		<c:when test="${sessionScope.loginLevel == '관리자'}">
+			<a href="delete?boardNo=${boardDto.boardNo}">삭제</a>
+		</c:when>
+	</c:choose>
+	</c:if>
+	<a href="list">목록</a>
+</div>
 
-<p>
-    <a href="edit?board_no=${boardDto.board_no}">수정</a>
-    |
-    <a href="delete?board_no=${boardDto.board_no}" onclick="return confirm('정말 삭제할까요?')">삭제</a>
-    |
-    <a href="list">목록으로</a>
-</p>
-ml>
+<jsp:include page="/WEB-INF/views/template/footer.jsp"></jsp:include>
