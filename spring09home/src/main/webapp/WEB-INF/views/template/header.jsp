@@ -22,6 +22,7 @@
 			<a href="/pokemon/list">포켓몬정보</a>
 			<a href="/student/list">학생정보</a>
 			<a href="/board/list">자유게시판</a>
+			<a href="/board/list2">자유게시판2</a>
 			<a href="/member/mypage">내정보</a>
 			<a href="/member/logout">로그아웃</a>
 		</c:when>
@@ -31,6 +32,7 @@
 			<a href="/student/list">학생정보</a>
 			<a href="/book/list">도서정보</a>
 			<a href="/board/list">자유게시판</a>
+			<a href="/board/list2">자유게시판2</a>
 			<a href="/member/mypage">내정보</a>
 			<a href="/member/logout">로그아웃</a>
 		</c:when>
@@ -40,6 +42,7 @@
 			<a href="/student/list">학생정보</a>
 			<a href="/book/list">도서정보</a>
 			<a href="/board/list">자유게시판</a>
+			<a href="/board/list2">자유게시판2</a>
 			<a href="/member/logout">로그아웃</a>
 			<a href="/admin/home">[관리메뉴]</a>
 		</c:when>
@@ -48,6 +51,7 @@
 			<a href="/pokemon/list">포켓몬정보</a>
 			<a href="/member/join">회원가입</a>
 			<a href="/board/list">자유게시판</a>
+			<a href="/board/list2">자유게시판2</a>
 			<a href="/member/login">로그인</a>
 		</c:otherwise>
 	</c:choose>

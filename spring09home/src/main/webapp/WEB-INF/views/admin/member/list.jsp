@@ -28,7 +28,7 @@
 		<h3>검색어를 입력하세요</h3>
 	</c:when>
 	<c:otherwise>
-		<table border="1" width="800">
+		<table border="1" width="1000">
 			<thead>
 				<tr>
 					<th>아이디</th>
@@ -38,6 +38,7 @@
 					<th>연락처</th>
 					<th>등급</th>
 					<th>가입일</th>
+					
 				</tr>
 			</thead>
 			<tbody align="center">

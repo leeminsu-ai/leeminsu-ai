@@ -6,7 +6,7 @@
 <jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
 <%-- 제목 --%>
-<h1>자유 게시판</h1>
+<h1>자유 게시판(멘션형태)</h1>
 <p>타인에 대한 무분별한 비방 또는 욕설은 제제의 대상입니다</p>
 
 <c:choose>
@@ -20,49 +20,19 @@
 
 
 <%-- 글 목록 --%>
-<table border="1" width="1000">
-	<thead>
-		<tr>
-			<th>번호</th>
-			<th width="40%">제목</th>
-			<th>작성자</th>
-			<th>작성일</th>
-			<th>조회수</th>
-			<th>좋아요</th>
-			<th>그룹</th>
-			<th>상위글</th>
-			<th>차수</th>
-		</tr>
-	</thead>
-	<tbody align="center">
+<table border="1" width="100%">
+	<tbody align="left">
 		<c:forEach var="boardListVO" items="${boardList}" varStatus="status">
 		<tr bgcolor="${status.index < noticeCount ? '#ffeaa7' : ''}">
-			<td>${boardListVO.boardNo} (${status.index})</td>
-			<td align="left">
-				<%--차수만큼 띄어쓰기(공지로 표시되는 경우가 아니라면) --%>
-				<c:if test="${status.index >= noticeCount}">
-					<c:forEach var="i" begin="1" end="${boardListVO.boardDepth}" step="1">
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					</c:forEach>
-					<c:if test="${boardListVO.boardDepth > 0}">
-						<img src="/images/board/reply.png" width="16" height="16">
-					</c:if>
+			<td>
+				No.${boardListVO.boardNo} 
+				(${boardListVO.memberNickname == null ? '탈퇴한사용자' : boardListVO.memberNickname})
+				<br><br>
+				<c:if test="${boardListVO.boardDepth > 0}">
+					<div style="color:red">@ ${boardListVO.originWriter} - ${boardListVO.originTitle}</div>
 				</c:if>
-			
-				<%-- 공지사항인 경우는 제목앞에 (공지) 추가 --%>
-				<c:if test="${boardListVO.boardNotice == 'Y'}">(공지)</c:if>
-				
-				<a href="detail?boardNo=${boardListVO.boardNo}">
-					${boardListVO.boardTitle}
-				</a>
+				<a href="detail?boardNo=${boardListVO.boardNo}">${boardListVO.boardTitle}</a>
 			</td>
-			<td>${boardListVO.boardWriter == null ? '(탈퇴한사용자)' : boardListVO.memberNickname}</td>
-			<td>${boardListVO.boardWriteTime}</td>
-			<td>${boardListVO.boardRead}</td>
-			<td>${boardListVO.boardLike}</td>
-			<td>${boardListVO.boardGroup}</td>
-			<td>${boardListVO.boardOrigin}</td>
-			<td>${boardListVO.boardDepth}</td>
 		</tr>
 		</c:forEach>
 	</tbody>
@@ -84,8 +54,7 @@
 <form action="list">
 	<select name="column">
 		<option value="board_title" ${pageVO.column == 'board_title' ? 'selected' : ''}>제목</option>
-		<option value="board_writer" ${pageVO.column == 'board_writer' ? 'selected' : ''}>작성자ID</option>
-		<option value="member_nickname" ${pageVO.column == 'member_nickname' ? 'selected' : ''}>작성자닉네임</option>
+		<option value="board_writer" ${pageVO.column == 'board_writer' ? 'selected' : ''}>작성자</option>
 	</select>
 	<input type="text" name="keyword" value="${pageVO.keyword}" required>
 	<button>검색</button>

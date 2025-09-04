@@ -1,4 +1,4 @@
-package com.kh.spring09.dto;
+package com.kh.spring09.vo;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -8,18 +8,25 @@ import java.time.format.DateTimeFormatter;
 import lombok.Data;
 
 @Data
-public class BoardDto {
+public class BoardMentionVO {
+	//board_mention이라는 뷰를 조회했을 때 나오는 항목을 담기 위한 필드를 작성
 	private int boardNo;
 	private String boardTitle;
 	private String boardWriter;
 	private Timestamp boardWtime, boardEtime;
-	private String boardContent;
 	private int boardRead, boardLike, boardReply;
 	private String boardNotice = "N";
-	private int boardGroup; //글 그룹 번호(답변형 게시판용)
-	private Integer boardOrigin; //상위 글 번호
-	private int boardDepth;//글 차수
-	//private boolean boardNotice;
+	private int boardGroup;//글 그룹번호(답변형 게시판용)
+	private Integer boardOrigin;//상위 글번호(답변형 게시판용)
+	private int boardDepth;//글 차수(답변형 게시판용)
+	
+	private String memberId;//작성자의 ID (=boardWriter와 동일)
+	private String memberNickname;//작성자의 닉네임
+	private String memberLevel;//작성자의 등급
+	
+	private int originNo;//원본글 번호
+	private String originTitle;//원본글 제목
+	private String originWriter;//원본글 작성자ID
 	
 	//EL에서 ${boardDto.boardWriteTime}으로 부를 수 있는 메소드
 	public String getBoardWriteTime() {
@@ -36,7 +43,3 @@ public class BoardDto {
 		}
 	}
 }
-
-
-
-

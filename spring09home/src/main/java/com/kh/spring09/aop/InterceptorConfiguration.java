@@ -45,7 +45,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {//웹 기본 
 						"/member/join*",
 						"/member/login",
 						"/member/goodbye",
-						"/board/list",
+						"/board/list*",
 						"/board/detail"
 					).order(1);
 		

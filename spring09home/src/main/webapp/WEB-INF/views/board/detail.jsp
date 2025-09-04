@@ -5,10 +5,24 @@
 
 <jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
-<h1>${boardDto.boardTitle}</h1>
+<h1>
+	${boardDto.boardTitle} 
+	<c:if test="${boardDto.boardEtime != null}">
+	(수정됨)
+	</c:if>
+</h1>
 <div>
-	${boardDto.boardWriter == null ? '탈퇴한사용자' : boardDto.boardWriter}
-	(등급)
+<%-- 	${boardDto.boardWriter == null ? '탈퇴한사용자' : boardDto.boardWriter} --%>
+
+	<c:choose>
+		<c:when test="${memberDto == null}">탈퇴한사용자</c:when>
+		<c:otherwise>
+			<a href="/member/detail?memberId=${memberDto.memberId}">
+				${memberDto.memberNickname}
+			</a>  
+			(${memberDto.memberLevel})
+		</c:otherwise>
+	</c:choose>
 </div>
 <div>
 	<fmt:formatDate value="${boardDto.boardWtime}" pattern="yyyy-MM-dd HH:mm"/> 
@@ -26,6 +40,7 @@
 <hr>
 <div>
 	<a href="write">글쓰기</a> 
+	<a href="write?boardOrigin=${boardDto.boardNo}">답글쓰기</a> 
 	<%-- 내 글일 경우 수정 삭제를 모두 표시 --%>
 	<c:if test="${sessionScope.loginId != null}">
 	<c:choose>
